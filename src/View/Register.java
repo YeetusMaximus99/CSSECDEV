@@ -122,9 +122,7 @@ public class Register extends javax.swing.JPanel {
         Pattern pattern = Pattern.compile(patterns);
         Matcher matcher = pattern.matcher(passwordFld.getText()); 
         boolean matchFound = matcher.find();
-        passwordFld.setText("");
-        confpassFld.setText("");
-        usernameFld.setText("");
+        
         if(matchFound){
         frame.registerAction(usernameFld.getText(), passwordFld.getText(), confpassFld.getText());
             if(passwordFld.getText().equals(confpassFld.getText())){
@@ -134,11 +132,17 @@ public class Register extends javax.swing.JPanel {
                  showMessageDialog(null,"Password and Confirm Password Do not Match!");
             }
         
+        byte[] salt = frame.main.sqlite.newSalt();
+        frame.registerAction(usernameFld.getText(), passwordFld.getText(), confpassFld.getText(),salt);
+        frame.loginNav();
         }
         else{
            //insert gui warning code error here
            showMessageDialog(null, "Invalid Password! Make sure your password has at least one digit,one upper case letter,one lower case letter, and one symbol. Your password must be 8-20 characters long");
         }
+        passwordFld.setText("");
+        confpassFld.setText("");
+        usernameFld.setText("");
         
         //frame.securityquestionNav();
     }//GEN-LAST:event_registerBtnActionPerformed

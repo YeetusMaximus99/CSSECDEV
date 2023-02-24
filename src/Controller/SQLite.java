@@ -4,12 +4,23 @@ import Model.History;
 import Model.Logs;
 import Model.Product;
 import Model.User;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Random;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
 
 public class SQLite {
     
@@ -86,7 +97,8 @@ public class SQLite {
             + " username TEXT NOT NULL UNIQUE,\n"
             + " password TEXT NOT NULL,\n"
             + " role INTEGER DEFAULT 2,\n"
-            + " locked INTEGER DEFAULT 0\n"
+            + " locked INTEGER DEFAULT 0,\n"
+            + " salt VARBINARY\n"
             + ");";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -179,12 +191,18 @@ public class SQLite {
         }
     }
     
-    public void addUser(String username, String password) {
-        String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + password + "')";
+    public void addUser(String username, String password, byte[] salt) {
+        String sql = "INSERT INTO users(username,password,salt) VALUES(?,?,?)";
+        
+        String hashedPass = getHash(password,salt);
+        System.out.println(hashedPass);
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPass);
+            pstmt.setBytes(3, salt);
+            pstmt.executeUpdate();
             
 //      PREPARED STATEMENT EXAMPLE
 //      String sql = "INSERT INTO users(username,password) VALUES(?,?)";
@@ -316,5 +334,131 @@ public class SQLite {
             System.out.print(ex);
         }
         return product;
+    }
+    
+    public boolean checkUser(String username, String password, String passwordConfirm){
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username=?";
+        ArrayList<User> users = new ArrayList<User>();
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                users.add(new User(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked")));
+            }
+            if(users.isEmpty() && passwordConfirm.equals(password))
+                return true;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public String getHash(String password, byte[] salt) {
+         String generatedPassword = null;
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            
+            // Add password bytes to digest
+            md.update(salt);
+            
+            // Get the hash's bytes
+            byte[] bytes = md.digest(password.getBytes());
+            
+            // This bytes[] has bytes in decimal format;
+            // Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16)
+                        .substring(1));
+            }
+            
+            // Get complete hashed password in hex format
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return generatedPassword;
+    }
+    
+    public byte[] newSalt() {
+    Random RANDOM = new SecureRandom();   
+        
+    byte[] salt = new byte[16];
+    RANDOM.nextBytes(salt);
+    return salt;
+  }
+    
+    public byte[] getSalt(String username) {
+        String sql = "SELECT id, username, password, role, locked, salt FROM users WHERE username=?";
+        User user = new User("","");
+        
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                user = new User(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked"),
+                        rs.getBytes("salt"));
+            }
+            if(user.getSalt().equals(null))
+                return null;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        
+        return user.getSalt();
+    }
+ 
+    
+    
+    public boolean authenticateUser(String username, String password){
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username=? and password=?";
+        ArrayList<User> users = new ArrayList<User>();
+        
+        String hashedPass = getHash(password, getSalt(username));
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPass);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                users.add(new User(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked")));
+            }
+            if(users.isEmpty())
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
+        
     }
 }
