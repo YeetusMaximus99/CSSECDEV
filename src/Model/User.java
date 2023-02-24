@@ -6,6 +6,7 @@ public class User {
     private String password;
     private int role = 2;
     private int locked = 0;
+    private byte[] salt;
 
     public User(String username, String password){
         this.username = username;
@@ -18,6 +19,16 @@ public class User {
         this.password = password;
         this.role = role;
         this.locked = locked;
+        
+    }
+    
+    public User(int id, String username, String password, int role, int locked, byte[] salt){
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.locked = locked;
+        this.salt = salt;
     }
     
     public int getId() {
@@ -58,5 +69,13 @@ public class User {
 
     public void setLocked(int locked) {
         this.locked = locked;
+    }
+    
+    public void setSatlt(byte[] salt) {
+        this.salt = salt;
+    }
+    
+    public byte[] getSalt() {
+        return salt;
     }
 }
