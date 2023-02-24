@@ -127,7 +127,13 @@ public class Register extends javax.swing.JPanel {
         usernameFld.setText("");
         if(matchFound){
         frame.registerAction(usernameFld.getText(), passwordFld.getText(), confpassFld.getText());
-        frame.loginNav();
+            if(passwordFld.getText().equals(confpassFld.getText())){
+                frame.loginNav();
+            }
+            else{
+                 showMessageDialog(null,"Password and Confirm Password Do not Match!");
+            }
+        
         }
         else{
            //insert gui warning code error here
