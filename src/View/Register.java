@@ -124,16 +124,22 @@ public class Register extends javax.swing.JPanel {
         boolean matchFound = matcher.find();
         
         if(matchFound){
+
         
             if(passwordFld.getText().equals(confpassFld.getText())){
                 byte[] salt = frame.main.sqlite.newSalt();
-                frame.registerAction(usernameFld.getText(), passwordFld.getText(), confpassFld.getText(),salt);
+                frame.registerAction(usernameFld.getText().toLowerCase(), passwordFld.getText(), confpassFld.getText(),salt);
                 frame.loginNav();
             }
             else{
                  showMessageDialog(null,"Password and Confirm Password Do not Match!");
             }
         
+
+        byte[] salt = frame.main.sqlite.newSalt();
+        frame.registerAction(usernameFld.getText().toLowerCase(), passwordFld.getText(), confpassFld.getText(),salt);
+        frame.loginNav();
+
         }
         else{
            //insert gui warning code error here

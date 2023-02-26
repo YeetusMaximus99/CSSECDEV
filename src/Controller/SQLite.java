@@ -402,7 +402,7 @@ public class SQLite {
     public byte[] getSalt(String username) {
         String sql = "SELECT id, username, password, role, locked, salt FROM users WHERE username=?";
         User user = new User("","");
-        
+        byte[] noSalt = new byte[1];
             
         try{
             Connection conn = DriverManager.getConnection(driverURL);
@@ -419,8 +419,8 @@ public class SQLite {
                         rs.getInt("locked"),
                         rs.getBytes("salt"));
             }
-            if(user.getSalt().equals(null))
-                return null;
+            if(user.getSalt()==null)
+                return noSalt;
             
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -457,6 +457,48 @@ public class SQLite {
             
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        return true;
+        
+    }
+    
+    public boolean forgotPassword(String username,byte[] salt, String password){
+        String sql = "UPDATE users SET password=?,salt=? WHERE username=?";
+        ArrayList<User> users = new ArrayList<User>();
+        
+        String hashedPass = getHash(password, getSalt(username));
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, hashedPass);
+            pstmt.setBytes(2, salt);
+            pstmt.setString(3, username);
+            
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+        
+    }
+    
+    public boolean getSecurityQuestion(String username){
+        String sql = "SELECT id, username, password, role, locked, question, answer FROM users WHERE username=? and password=?";
+        ArrayList<User> users = new ArrayList<User>();
+        
+        
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+     
+            
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
         return true;
         
