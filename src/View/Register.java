@@ -192,7 +192,7 @@ public class Register extends javax.swing.JPanel {
         if(matchFound){
 
         
-            if(passwordFld.getText().equals(confpassFld.getText())){
+            if(frame.main.sqlite.checkUser(usernameFld.getText().toLowerCase(),passwordFld.getText(),confpassFld.getText())){
                 byte[] salt = frame.main.sqlite.newSalt();
                 frame.registerAction(usernameFld.getText().toLowerCase(), passwordFld.getText(),SecQuestFld.getText(),SecQuestFld1.getText(),SecQuestFld2.getText(), confpassFld.getText(),salt);
                 passwordFld.setText("");
@@ -205,7 +205,7 @@ public class Register extends javax.swing.JPanel {
                 frame.loginNav();
             }
             else{
-                 showMessageDialog(null,"Password and Confirm Password Do not Match!");
+                 showMessageDialog(null,"Invalid registration, please check input and try again");
             }
         
 

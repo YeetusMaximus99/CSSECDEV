@@ -368,6 +368,32 @@ public class SQLite {
         return false;
     }
     
+    public boolean userExists(String username){
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username=?";
+        ArrayList<User> users = new ArrayList<User>();
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                users.add(new User(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked")));
+            }
+            if(users.isEmpty())
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
+    }
+    
     public String getHash(String password, byte[] salt) {
          String generatedPassword = null;
         try {

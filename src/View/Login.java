@@ -156,7 +156,11 @@ private void forgotPass() {
         panel.add(securityQuestion3);
         panel.add(new javax.swing.JLabel("New Password:"));
         panel.add(newPass);
-        if(!(usernameFld.getText().equals(""))){
+        if(!(usernameFld.getText().equals("")))
+        if(!(frame.main.sqlite.userExists(usernameFld.getText().toLowerCase()))){
+            showMessageDialog(null, "User does not exist");
+        }
+        else{
         int result = javax.swing.JOptionPane.showConfirmDialog(null, panel, "Test",
             javax.swing.JOptionPane.OK_CANCEL_OPTION, javax.swing.JOptionPane.PLAIN_MESSAGE);
         
@@ -188,6 +192,7 @@ private void forgotPass() {
         newPass.setText("");
         }
         }else{
+            
             showMessageDialog(null, "Please input your username");
         }
        
