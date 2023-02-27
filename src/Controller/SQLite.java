@@ -192,7 +192,7 @@ public class SQLite {
     }
     
     public void addUser(String username, String password,String secQuest,String secQuest1,String secQuest2, byte[] salt) {
-        String sql = "INSERT INTO users(username,password,answer1,answer2,answer3,salt) VALUES(?,?,?)";
+        String sql = "INSERT INTO users(username,password,answer1,answer2,answer3,salt) VALUES(?,?,?,?,?,?)";
         
         String hashedPass = getHash(password,salt);
         System.out.println(hashedPass);
