@@ -4,6 +4,7 @@ import Model.History;
 import Model.Logs;
 import Model.Product;
 import Model.User;
+import java.util.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -195,16 +196,18 @@ public class SQLite {
         String sql = "INSERT INTO users(username,password,answer1,answer2,answer3,salt) VALUES(?,?,?,?,?,?)";
         
         String hashedPass = getHash(password,salt);
-        System.out.println(hashedPass);
+        String hashedSec1 = getHash(secQuest,salt);
+        String hashedSec2 = getHash(secQuest1,salt);
+        String hashedSec3 = getHash(secQuest2,salt);
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPass);
             pstmt.setBytes(6, salt);
-            pstmt.setString(3, secQuest);
-            pstmt.setString(4, secQuest1);
-            pstmt.setString(5, secQuest2);
+            pstmt.setString(3, hashedSec1);
+            pstmt.setString(4, hashedSec2);
+            pstmt.setString(5, hashedSec3);
             pstmt.executeUpdate();
             
 //      PREPARED STATEMENT EXAMPLE
@@ -465,7 +468,7 @@ public class SQLite {
         
     }
     
-    public boolean forgotPassword(String username,byte[] salt, String password){
+    public boolean forgotPassword(String username, String password){
         String sql = "UPDATE users SET password=?,salt=? WHERE username=?";
         ArrayList<User> users = new ArrayList<User>();
         
@@ -475,9 +478,9 @@ public class SQLite {
             Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, hashedPass);
-            pstmt.setBytes(2, salt);
+            pstmt.setBytes(2, getSalt(username));
             pstmt.setString(3, username);
-            
+            pstmt.executeUpdate();
             
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -487,10 +490,10 @@ public class SQLite {
         
     }
     
-    public String getSecurityQuestion(String username){
-        String sql = "SELECT id, username, password, role, locked, question, answer FROM users WHERE username=?";
+    public List<String> getSecurityQuestionAnswers(String username){
+        String sql = "SELECT username,password, answer1, answer2, answer3 FROM users WHERE username=?";
         User user = new User("","");
-        
+        List<String> answers = new ArrayList<String>();
         
             
         try{
@@ -500,11 +503,11 @@ public class SQLite {
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                user = new User(rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getInt("role"),
-                        rs.getInt("locked"));
+                user = new User(rs.getString("username"),
+                        rs.getString("password"));
+                user.setAnswer1(rs.getString("answer1"));
+                user.setAnswer2(rs.getString("answer2"));
+                user.setAnswer3(rs.getString("answer3"));
             }
             if(user==null)
                 return null;
@@ -513,7 +516,10 @@ public class SQLite {
             ex.printStackTrace();
             return null;
         }
-        return user.getQuestion();
+        answers.add(user.getAnswer1());
+        answers.add(user.getAnswer2());
+        answers.add(user.getAnswer3());
+        return answers;
         
     }
 }

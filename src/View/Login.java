@@ -2,6 +2,9 @@
 package View;
 
 import java.awt.Color;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 
@@ -138,22 +141,59 @@ public class Login extends javax.swing.JPanel {
 private void forgotPass() {
         
         
-        javax.swing.JTextField securityQuestion = new javax.swing.JTextField("");
+        javax.swing.JTextField securityQuestion1 = new javax.swing.JTextField("");
+        javax.swing.JTextField securityQuestion2 = new javax.swing.JTextField("");
+        javax.swing.JTextField securityQuestion3 = new javax.swing.JTextField("");
         javax.swing.JPasswordField newPass = new javax.swing.JPasswordField("");
         javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.GridLayout(0, 1));
         
-        String question = frame.main.sqlite.getSecurityQuestion(usernameFld.getText().toLowerCase() );
-        panel.add(new javax.swing.JLabel(question));
-        panel.add(securityQuestion);
+        
+        panel.add(new javax.swing.JLabel("What city were you born in?"));
+        panel.add(securityQuestion1);
+        panel.add(new javax.swing.JLabel("What is your oldest sibling's middle name?"));
+        panel.add(securityQuestion2);
+        panel.add(new javax.swing.JLabel("What is your mother's maiden name?"));
+        panel.add(securityQuestion3);
         panel.add(new javax.swing.JLabel("New Password:"));
         panel.add(newPass);
+        if(!(usernameFld.getText().equals(""))){
         int result = javax.swing.JOptionPane.showConfirmDialog(null, panel, "Test",
             javax.swing.JOptionPane.OK_CANCEL_OPTION, javax.swing.JOptionPane.PLAIN_MESSAGE);
+        
+        
+        if (result == javax.swing.JOptionPane.OK_OPTION) {
+        List<String> answers = frame.main.sqlite.getSecurityQuestionAnswers(usernameFld.getText().toLowerCase());
+        if(answers.get(0).equals(frame.main.sqlite.getHash(securityQuestion1.getText(),frame.main.sqlite.getSalt(usernameFld.getText().toLowerCase())))
+                && answers.get(1).equals(frame.main.sqlite.getHash(securityQuestion2.getText(),frame.main.sqlite.getSalt(usernameFld.getText().toLowerCase())))
+                && answers.get(2).equals(frame.main.sqlite.getHash(securityQuestion3.getText(),frame.main.sqlite.getSalt(usernameFld.getText().toLowerCase())))){
+        
+        String patterns = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(newPass.getText()); 
+        boolean matchFound = matcher.find();
+        if(matchFound){
+        frame.main.sqlite.forgotPassword(usernameFld.getText().toLowerCase(),newPass.getText());
+        showMessageDialog(null, "Password Update Successful");
+        }
+        else{
+            showMessageDialog(null, "Invalid Password! Make sure your password has at least one digit,one upper case letter,one lower case letter, and one symbol. Your password must be 8-20 characters long");
+        }
+        }
+        else{
+           showMessageDialog(null, "Incorrect Security Question Answers");
+        }
+        securityQuestion1.setText("");
+        securityQuestion2.setText("");
+        securityQuestion3.setText("");
+        newPass.setText("");
+        }
+        }else{
+            showMessageDialog(null, "Please input your username");
+        }
        
     }
     private void passwordForgetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordForgetBtnActionPerformed
-        usernameFld.setText("");
-        passwordFld.setText("");
+
         forgotPass();
     }//GEN-LAST:event_passwordForgetBtnActionPerformed
 
