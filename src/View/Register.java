@@ -202,6 +202,7 @@ public class Register extends javax.swing.JPanel {
                 SecQuestFld.setText("");
                 SecQuestFld1.setText("");
                 SecQuestFld2.setText("");
+                showMessageDialog(null,"Register Success");
                 frame.loginNav();
             }
             else{
