@@ -7,6 +7,8 @@ public class User {
     private int role = 2;
     private int locked = 0;
     private byte[] salt;
+    private String question;
+    private String answer;
 
     public User(String username, String password){
         this.username = username;
@@ -77,5 +79,19 @@ public class User {
     
     public byte[] getSalt() {
         return salt;
+    }
+    
+    public String getQuestion() {
+        return question;
+    }
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+    
+    public String getAnswer() {
+        return answer;
+    }
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

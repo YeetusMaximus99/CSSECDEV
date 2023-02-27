@@ -484,23 +484,33 @@ public class SQLite {
         
     }
     
-    public boolean getSecurityQuestion(String username){
-        String sql = "SELECT id, username, password, role, locked, question, answer FROM users WHERE username=? and password=?";
-        ArrayList<User> users = new ArrayList<User>();
+    public String getSecurityQuestion(String username){
+        String sql = "SELECT id, username, password, role, locked, question, answer FROM users WHERE username=?";
+        User user = new User("","");
         
         
             
         try{
             Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql);
-     
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
             
+            while (rs.next()) {
+                user = new User(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("role"),
+                        rs.getInt("locked"));
+            }
+            if(user==null)
+                return null;
             
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
+            return null;
         }
-        return true;
+        return user.getQuestion();
         
     }
 }

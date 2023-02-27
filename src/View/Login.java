@@ -142,8 +142,8 @@ private void forgotPass() {
         javax.swing.JPasswordField newPass = new javax.swing.JPasswordField("");
         javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.GridLayout(0, 1));
         
-        frame.main.sqlite.getSecurityQuestion(usernameFld.getText().toLowerCase());
-        panel.add(new javax.swing.JLabel(""));
+        String question = frame.main.sqlite.getSecurityQuestion(usernameFld.getText().toLowerCase() );
+        panel.add(new javax.swing.JLabel(question));
         panel.add(securityQuestion);
         panel.add(new javax.swing.JLabel("New Password:"));
         panel.add(newPass);
