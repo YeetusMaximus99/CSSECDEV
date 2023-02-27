@@ -191,8 +191,8 @@ public class SQLite {
         }
     }
     
-    public void addUser(String username, String password, byte[] salt) {
-        String sql = "INSERT INTO users(username,password,salt) VALUES(?,?,?)";
+    public void addUser(String username, String password,String secQuest,String secQuest1,String secQuest2, byte[] salt) {
+        String sql = "INSERT INTO users(username,password,answer1,answer2,answer3,salt) VALUES(?,?,?)";
         
         String hashedPass = getHash(password,salt);
         System.out.println(hashedPass);
@@ -201,7 +201,10 @@ public class SQLite {
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPass);
-            pstmt.setBytes(3, salt);
+            pstmt.setBytes(6, salt);
+            pstmt.setString(3, secQuest);
+            pstmt.setString(4, secQuest1);
+            pstmt.setString(5, secQuest2);
             pstmt.executeUpdate();
             
 //      PREPARED STATEMENT EXAMPLE
