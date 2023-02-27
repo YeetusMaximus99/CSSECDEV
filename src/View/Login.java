@@ -198,8 +198,7 @@ private void forgotPass() {
        
     }
     private void passwordForgetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordForgetBtnActionPerformed
-
-        forgotPass();
+      forgotPass();
     }//GEN-LAST:event_passwordForgetBtnActionPerformed
 
 
