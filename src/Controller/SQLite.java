@@ -494,6 +494,32 @@ public class SQLite {
         
     }
     
+    public int getRole(String username, String password){
+        String sql = "Select role FROM users WHERE username=? and password=?";
+        int temp =-1;
+        
+        String hashedPass = getHash(password, getSalt(username));
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPass);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                        System.out.println(temp);
+                        temp =rs.getInt("role");
+            }
+      
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return temp;
+        
+    }
+    
     public boolean forgotPassword(String username, String password){
         String sql = "UPDATE users SET password=?,salt=? WHERE username=?";
         ArrayList<User> users = new ArrayList<User>();

@@ -112,11 +112,11 @@ public class Login extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         if(frame.main.sqlite.authenticateUser(usernameFld.getText().toLowerCase(),passwordFld.getText())&& attempt != 3) {
-       
+        frame.authRole(frame.main.sqlite.getRole(usernameFld.getText().toLowerCase(),passwordFld.getText()));
         usernameFld.setText("");
         passwordFld.setText("");
-        
         frame.mainNav();
+        
         }
         else if (attempt != 3){
             attempt++;

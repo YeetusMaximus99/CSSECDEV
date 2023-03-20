@@ -4,6 +4,7 @@ import Controller.Main;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 public class Frame extends javax.swing.JFrame {
@@ -50,6 +51,7 @@ public class Frame extends javax.swing.JFrame {
         adminBtn.setBackground(new java.awt.Color(250, 250, 250));
         adminBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         adminBtn.setText("Admin Home");
+        adminBtn.setEnabled(false);
         adminBtn.setFocusable(false);
         adminBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -65,6 +67,7 @@ public class Frame extends javax.swing.JFrame {
         managerBtn.setBackground(new java.awt.Color(250, 250, 250));
         managerBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         managerBtn.setText("Manager Home");
+        managerBtn.setEnabled(false);
         managerBtn.setFocusable(false);
         managerBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,6 +78,7 @@ public class Frame extends javax.swing.JFrame {
         staffBtn.setBackground(new java.awt.Color(250, 250, 250));
         staffBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         staffBtn.setText("Staff Home");
+        staffBtn.setEnabled(false);
         staffBtn.setFocusable(false);
         staffBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,6 +89,7 @@ public class Frame extends javax.swing.JFrame {
         clientBtn.setBackground(new java.awt.Color(250, 250, 250));
         clientBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         clientBtn.setText("Client Home");
+        clientBtn.setEnabled(false);
         clientBtn.setFocusable(false);
         clientBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,10 +114,10 @@ public class Frame extends javax.swing.JFrame {
             .addGroup(NavigationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(NavigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(staffBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                     .addComponent(adminBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                     .addComponent(managerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(staffBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(clientBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(logoutBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -223,7 +228,6 @@ public class Frame extends javax.swing.JFrame {
         this.main = controller;
         loginPnl.frame = this;
         registerPnl.frame = this;
-        
         adminHomePnl.init(main.sqlite);
         clientHomePnl.init(main.sqlite);
         managerHomePnl.init(main.sqlite);
@@ -245,7 +249,9 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public void mainNav(){
+        
         frameView.show(Container, "homePnl");
+        
     }
     
     public void loginNav(){
@@ -258,6 +264,33 @@ public class Frame extends javax.swing.JFrame {
     
     public void registerAction(String username, String password,String secQuest,String secQuest1,String secQuest2, String confpass, byte[] salt){
         main.sqlite.addUser(username, password,secQuest,secQuest1,secQuest2, salt);
+       
+        
+    }
+    public void authRole(int role){
+        switch(role){
+            case 2:
+               clientHomePnl.showPnl("home");
+               contentView.show(Content, "clientHomePnl");
+               clientBtn.setEnabled(true);
+                break;
+            case 3:
+                staffHomePnl.showPnl("home");
+                contentView.show(Content, "staffHomePnl");
+                staffBtn.setEnabled(true);
+                break;
+            case 4:
+                contentView.show(Content, "managerHomePnl");
+                managerHomePnl.showPnl("home");
+                managerBtn.setEnabled(true);
+                break;
+            case 5:
+                adminHomePnl.showPnl("home");
+                contentView.show(Content, "adminHomePnl");
+                adminBtn.setEnabled(true);
+            
+        }
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

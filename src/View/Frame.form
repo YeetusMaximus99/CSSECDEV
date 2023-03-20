@@ -113,13 +113,13 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="staffBtn" pref="226" max="32767" attributes="0"/>
                               <Component id="adminBtn" alignment="1" max="32767" attributes="0"/>
                               <Component id="jLabel1" alignment="1" pref="226" max="32767" attributes="0"/>
                               <Component id="managerBtn" alignment="0" max="32767" attributes="0"/>
-                              <Component id="staffBtn" alignment="0" max="32767" attributes="0"/>
                               <Component id="clientBtn" alignment="0" max="32767" attributes="0"/>
                               <Component id="logoutBtn" alignment="0" max="32767" attributes="0"/>
                           </Group>
@@ -157,6 +157,7 @@
                       <Font name="Tahoma" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Admin Home"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -182,6 +183,7 @@
                       <Font name="Tahoma" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Manager Home"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -197,6 +199,7 @@
                       <Font name="Tahoma" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Staff Home"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -212,6 +215,7 @@
                       <Font name="Tahoma" size="18" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Client Home"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                   <Events>
