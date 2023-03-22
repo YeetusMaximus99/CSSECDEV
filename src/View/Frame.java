@@ -279,20 +279,32 @@ public class Frame extends javax.swing.JFrame {
                clientHomePnl.showPnl("home",user,role);
                contentView.show(Content, "clientHomePnl");
                clientBtn.setEnabled(true);
+               staffBtn.setEnabled(false);
+               managerBtn.setEnabled(false);
+               adminBtn.setEnabled(false);
                 break;
             case 3:
                 staffHomePnl.showPnl("home",user,role);
                 contentView.show(Content, "staffHomePnl");
+                clientBtn.setEnabled(false);
+                managerBtn.setEnabled(false);
+                adminBtn.setEnabled(false);
                 staffBtn.setEnabled(true);
                 break;
             case 4:
                 contentView.show(Content, "managerHomePnl");
                 managerHomePnl.showPnl("home",user,role);
+                clientBtn.setEnabled(false);
+                staffBtn.setEnabled(false);
+                adminBtn.setEnabled(false);
                 managerBtn.setEnabled(true);
                 break;
             case 5:
                 adminHomePnl.showPnl("home",user,role);
                 contentView.show(Content, "adminHomePnl");
+                clientBtn.setEnabled(false);
+                staffBtn.setEnabled(false);
+                managerBtn.setEnabled(false);
                 adminBtn.setEnabled(true);
             
         }

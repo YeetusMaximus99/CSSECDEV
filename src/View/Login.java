@@ -111,8 +111,12 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        if(frame.main.sqlite.authenticateUser(usernameFld.getText().toLowerCase(),passwordFld.getText())&& attempt != 3) {
-        frame.authRole(frame.main.sqlite.getRole(usernameFld.getText().toLowerCase(),passwordFld.getText()),usernameFld.getText().toLowerCase());
+        if(frame.main.sqlite.getLocked(usernameFld.getText())==1){
+            
+            showMessageDialog(null, "Maximum attempts reached account has been locked. Please contact an Admin for assistance");
+        }
+        else if(frame.main.sqlite.authenticateUser(usernameFld.getText().toLowerCase(),passwordFld.getText())&& attempt != 3) {
+        frame.authRole(frame.main.sqlite.getRole(usernameFld.getText().toLowerCase(),passwordFld.getText()),usernameFld.getText());
         usernameFld.setText("");
         passwordFld.setText("");
         frame.mainNav();
@@ -120,12 +124,14 @@ public class Login extends javax.swing.JPanel {
         }
         else if (attempt != 3){
             attempt++;
+            if (attempt == 3)
+                frame.main.sqlite.lockout(usernameFld.getText().toLowerCase());
+            
+            
             showMessageDialog(null, "Incorrect username/password. Please try again");
             if (attempt == 2)
                 showMessageDialog(null, "Next incorrect login attempt will initiate lockout");
         }
-        else
-            showMessageDialog(null, "Maximum attempts reached please try again later");
             
     }//GEN-LAST:event_loginBtnActionPerformed
 
