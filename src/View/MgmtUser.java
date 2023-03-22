@@ -25,7 +25,7 @@ public class MgmtUser extends javax.swing.JPanel {
     public SQLite sqlite;
     public DefaultTableModel tableModel;
     
-    public MgmtUser(SQLite sqlite) {
+    public MgmtUser(SQLite sqlite, String currUser, int role) {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();

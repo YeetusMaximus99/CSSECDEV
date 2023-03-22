@@ -242,6 +242,28 @@ public class SQLite {
         }
         return histories;
     }
+    public ArrayList<History> getUserHistory(String username){
+        String sql = "SELECT id, username, name, stock, timestamp FROM history where username = ?";
+        ArrayList<History> histories = new ArrayList<History>();
+        
+        try {
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                histories.add(new History(rs.getInt("id"),
+                                   rs.getString("username"),
+                                   rs.getString("name"),
+                                   rs.getInt("stock"),
+                                   rs.getString("timestamp")));
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+        return histories;
+    }
+    
     
     public ArrayList<Logs> getLogs(){
         String sql = "SELECT id, event, username, desc, timestamp FROM logs";
@@ -341,7 +363,43 @@ public class SQLite {
         }
         return product;
     }
-    
+    public int getStock(String name){
+        String sql = "SELECT stock, price FROM product WHERE name=?;";
+        int stock = 0;
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                stock = rs.getInt("stock");
+            }
+           
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return stock;
+    }
+    public void buyProduct(int stock,String name){
+        String sql = "UPDATE product set stock =? where name =?";
+
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, stock);
+            pstmt.setString(2, name);
+            
+            pstmt.executeUpdate();
+           
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            
+        }
+       
+    }
     public boolean checkUser(String username, String password, String passwordConfirm){
         String sql = "SELECT id, username, password, role, locked FROM users WHERE username=?";
         ArrayList<User> users = new ArrayList<User>();

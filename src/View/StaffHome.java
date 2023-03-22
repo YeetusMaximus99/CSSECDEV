@@ -25,7 +25,8 @@ public class StaffHome extends javax.swing.JPanel {
     public MgmtLogs mgmtLogs;
     public MgmtProduct mgmtProduct;
     public MgmtUser mgmtUser;
-    
+    private String currUser;
+    private int role;
     private CardLayout contentView = new CardLayout();
     
     public StaffHome() {
@@ -33,10 +34,10 @@ public class StaffHome extends javax.swing.JPanel {
     }
     
     public void init(SQLite sqlite){
-        mgmtHistory = new MgmtHistory(sqlite);
+        mgmtHistory = new MgmtHistory(sqlite,currUser,role);
         mgmtLogs = new MgmtLogs(sqlite);
         mgmtProduct = new MgmtProduct(sqlite);
-        mgmtUser = new MgmtUser(sqlite);
+        mgmtUser = new MgmtUser(sqlite, currUser, role);
     
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME STAFF!", new java.awt.Color(0,204,102)), "home");
@@ -52,8 +53,10 @@ public class StaffHome extends javax.swing.JPanel {
 //        logsBtn.setVisible(false);
     }
     
-    public void showPnl(String panelName){
+    public void showPnl(String panelName,String user,int currRole){
         contentView.show(Content, panelName);
+        currUser = user;
+        role = currRole;
     }
 
     /**
@@ -165,7 +168,7 @@ public class StaffHome extends javax.swing.JPanel {
     }//GEN-LAST:event_usersBtnActionPerformed
 
     private void productsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsBtnActionPerformed
-        mgmtProduct.init();
+        mgmtProduct.init(currUser,role);
         usersBtn.setForeground(Color.black);
         productsBtn.setForeground(Color.red);
         historyBtn.setForeground(Color.black);

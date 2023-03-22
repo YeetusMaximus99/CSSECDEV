@@ -185,38 +185,40 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void adminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBtnActionPerformed
-        adminHomePnl.showPnl("home");
+        adminHomePnl.showPnl("home",currUser,currRole);
         contentView.show(Content, "adminHomePnl");
     }//GEN-LAST:event_adminBtnActionPerformed
 
     private void managerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerBtnActionPerformed
-        managerHomePnl.showPnl("home");
+        managerHomePnl.showPnl("home",currUser,currRole);
         contentView.show(Content, "managerHomePnl");
     }//GEN-LAST:event_managerBtnActionPerformed
 
     private void staffBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffBtnActionPerformed
-        staffHomePnl.showPnl("home");
+        staffHomePnl.showPnl("home",currUser,currRole);
         contentView.show(Content, "staffHomePnl");
     }//GEN-LAST:event_staffBtnActionPerformed
 
     private void clientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientBtnActionPerformed
-        clientHomePnl.showPnl("home");
+        clientHomePnl.showPnl("home",currUser,currRole);
         contentView.show(Content, "clientHomePnl");
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+        currUser = null;
         frameView.show(Container, "loginPnl");
+        
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
-    
+    private String currUser;
+    private int currRole;
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
     private StaffHome staffHomePnl = new StaffHome();
     private ClientHome clientHomePnl = new ClientHome();
-    
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
     
@@ -267,29 +269,34 @@ public class Frame extends javax.swing.JFrame {
        
         
     }
-    public void authRole(int role){
+    public void authRole(int role,String user){
+        System.out.println(role);
+        System.out.println(user);
+        currRole= role;
+        currUser = user;
         switch(role){
             case 2:
-               clientHomePnl.showPnl("home");
+               clientHomePnl.showPnl("home",user,role);
                contentView.show(Content, "clientHomePnl");
                clientBtn.setEnabled(true);
                 break;
             case 3:
-                staffHomePnl.showPnl("home");
+                staffHomePnl.showPnl("home",user,role);
                 contentView.show(Content, "staffHomePnl");
                 staffBtn.setEnabled(true);
                 break;
             case 4:
                 contentView.show(Content, "managerHomePnl");
-                managerHomePnl.showPnl("home");
+                managerHomePnl.showPnl("home",user,role);
                 managerBtn.setEnabled(true);
                 break;
             case 5:
-                adminHomePnl.showPnl("home");
+                adminHomePnl.showPnl("home",user,role);
                 contentView.show(Content, "adminHomePnl");
                 adminBtn.setEnabled(true);
             
         }
+   
         SwingUtilities.updateComponentTreeUI(this);
     }
 

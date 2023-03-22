@@ -7,6 +7,7 @@ package View;
 
 import Controller.SQLite;
 import Model.Product;
+import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,25 +22,33 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
+    private String currUser;
+    private int currRole;
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
-
+        
 //        UNCOMMENT TO DISABLE BUTTONS
-//        purchaseBtn.setVisible(false);
-//        addBtn.setVisible(false);
-//        editBtn.setVisible(false);
-//        deleteBtn.setVisible(false);
+       purchaseBtn.setVisible(false);
+       addBtn.setVisible(false);
+       editBtn.setVisible(false);
+      deleteBtn.setVisible(false);
     }
 
-    public void init(){
+    public void init(String user,int role){
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
+        currUser =user;
+        currRole = role;
+        switch(currRole){
+           case (2):
+               purchaseBtn.setVisible(true);
+               break;
+       }
         
 //      LOAD CONTENTS
         ArrayList<Product> products = sqlite.getProduct();
@@ -183,11 +192,13 @@ public class MgmtProduct extends javax.swing.JPanel {
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-
+            System.out.println((String) tableModel.getValueAt(table.getSelectedRow(), 0));
+            sqlite.buyProduct((sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText())), (String) tableModel.getValueAt(table.getSelectedRow(), 0));
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println(stockFld.getText());
             }
         }
+       
     }//GEN-LAST:event_purchaseBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
