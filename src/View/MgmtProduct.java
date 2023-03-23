@@ -53,6 +53,11 @@ public class MgmtProduct extends javax.swing.JPanel {
              addBtn.setVisible(true);
              editBtn.setVisible(true);
              deleteBtn.setVisible(true);  
+            case (3):
+               addBtn.setVisible(true);
+               editBtn.setVisible(true);
+               deleteBtn.setVisible(true);
+               break;
        }
         
 //      LOAD CONTENTS

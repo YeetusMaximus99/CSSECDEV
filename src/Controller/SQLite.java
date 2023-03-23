@@ -551,7 +551,47 @@ public class SQLite {
         return true;
         
     }
+    public boolean lockout(String username){
+        String sql = "UPDATE users SET locked=1 WHERE username=?";
+        ArrayList<User> users = new ArrayList<User>();
+        
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+        
+            pstmt.executeUpdate();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
     
+    public int getLocked(String username){
+        String sql = "Select locked FROM users WHERE username=?";
+        ArrayList<User> users = new ArrayList<User>();
+        int temp =-1;
+            
+        try{
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+        
+             ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                        
+                        temp =rs.getInt("locked");
+            }
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return temp;
+        }
+        return temp;
+    }
     public int getRole(String username, String password){
         String sql = "Select role FROM users WHERE username=? and password=?";
         int temp =-1;
