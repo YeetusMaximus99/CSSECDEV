@@ -70,6 +70,20 @@ public class MgmtProduct extends javax.swing.JPanel {
         }
     }
     
+        public void updateTable() {
+                ArrayList<Product> updatedProducts = sqlite.getProduct();
+
+             tableModel.setRowCount(0);
+
+
+             for (int nCtr = 0; nCtr < updatedProducts.size(); nCtr++) {
+                 tableModel.addRow(new Object[]{
+                     updatedProducts.get(nCtr).getName(),
+                     updatedProducts.get(nCtr).getStock(),
+                     updatedProducts.get(nCtr).getPrice()});
+             }
+        }
+    
     public void designer(JTextField component, String text){
         component.setSize(70, 600);
         component.setFont(new java.awt.Font("Tahoma", 0, 18));
@@ -207,6 +221,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             if (result == JOptionPane.OK_OPTION) {
                 sqlite.buyProduct((sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText())), (String) tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(stockFld.getText());
+                updateTable();
             }
         }
        
@@ -232,6 +247,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
+            updateTable();
         }   init(currUser,currRole);
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -252,7 +268,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
            
             if (result == JOptionPane.OK_OPTION) {
-                sqlite.EditProduct(table.getSelectedRow()+1,nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
+                sqlite.editProduct(table.getSelectedRow()+1,nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
                 System.out.println(nameFld.getText());
                 System.out.println(stockFld.getText());
                 System.out.println(priceFld.getText());
@@ -266,9 +282,12 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
-                sqlite.removeProduct(table.getSelectedRow()+1);
+                String product = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+                sqlite.removeProduct(product);
+                
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 init(currUser,currRole);
+                updateTable();
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed

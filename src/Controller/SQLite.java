@@ -596,7 +596,24 @@ public class SQLite {
         }
         return true;
     }
-    
+    public boolean unlock(String username){	
+        String sql = "UPDATE users SET locked=0 WHERE username=?";	
+        ArrayList<User> users = new ArrayList<User>();	
+        	
+            	
+        try{	
+            Connection conn = DriverManager.getConnection(driverURL);	
+            PreparedStatement pstmt = conn.prepareStatement(sql);	
+            pstmt.setString(1, username);	
+        	
+            pstmt.executeUpdate();	
+            	
+        } catch (Exception ex) {	
+            ex.printStackTrace();	
+            return false;	
+        }	
+        return true;	
+    }
     public int getLocked(String username){
         String sql = "Select locked FROM users WHERE username=?";
         ArrayList<User> users = new ArrayList<User>();
@@ -716,7 +733,7 @@ public class SQLite {
             ex.printStackTrace();
         }
     }
-    public void EditProduct(int id,String name,int stock,float price){
+    public void editProduct(int id,String name,int stock,float price){
       
         String sql = "UPDATE product SET name = ?,stock=?, price = ? WHERE id=?";
         try {
@@ -746,6 +763,30 @@ public class SQLite {
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+    
+     
+   	
+    	
+    public boolean editUserRole(String name, int role) {	
+        String sql = "UPDATE users SET role = ? WHERE username = ?";	
+        	
+        	
+        try{	
+            Connection conn = DriverManager.getConnection(driverURL);	
+            	
+            PreparedStatement pstmt = conn.prepareStatement(sql);	
+            	
+            pstmt.setInt(1, role);	
+            pstmt.setString(2, name);	
+        	
+            pstmt.executeUpdate();	
+            	
+        } catch (Exception ex) {	
+            ex.printStackTrace();	
+            return false;	
+        }	
+        return true;	
     }
     public void removeProduct(int id){
       
