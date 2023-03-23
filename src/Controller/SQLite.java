@@ -226,10 +226,10 @@ public class SQLite {
         String sql = "SELECT id, username, name, stock, timestamp FROM history";
         ArrayList<History> histories = new ArrayList<History>();
         
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
-            
+        try {
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 histories.add(new History(rs.getInt("id"),
                                    rs.getString("username"),
@@ -631,5 +631,53 @@ public class SQLite {
         answers.add(user.getAnswer3());
         return answers;
         
+    }
+    public void addProduct(int id,String name,int stock,float price){
+      
+        String sql = "INSERT INTO product(id, name, stock,price) VALUES (?, ?, ?,?)";
+        try {
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1,id);
+            pstmt.setString(2,name);
+            pstmt.setInt(3, stock);
+            pstmt.setFloat(4,price);
+            pstmt.executeUpdate();
+
+        
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public void EditProduct(String name,int stock,float price){
+      
+        String sql = "UPDATE product SET name = ?,stock=?, price = ? WHERE name=?";
+        try {
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(4,name);
+            pstmt.setString(1,name);
+            pstmt.setInt(2, stock);
+            pstmt.setFloat(3,price);
+            pstmt.executeUpdate();
+
+        
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public void removeProduct(String name){
+      
+        String sql = "DELETE from product WHERE name=?";
+        try {
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,name);
+            pstmt.execute();
+
+        
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

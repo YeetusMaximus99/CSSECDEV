@@ -7,6 +7,7 @@ package View;
 
 import Controller.SQLite;
 import Model.Product;
+import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -34,7 +35,7 @@ public class MgmtProduct extends javax.swing.JPanel {
        purchaseBtn.setVisible(false);
        addBtn.setVisible(false);
        editBtn.setVisible(false);
-      deleteBtn.setVisible(false);
+       deleteBtn.setVisible(false);
     }
 
     public void init(String user,int role){
@@ -48,6 +49,10 @@ public class MgmtProduct extends javax.swing.JPanel {
            case (2):
                purchaseBtn.setVisible(true);
                break;
+           case(5):
+             addBtn.setVisible(true);
+             editBtn.setVisible(true);
+             deleteBtn.setVisible(true);  
        }
         
 //      LOAD CONTENTS
@@ -193,8 +198,9 @@ public class MgmtProduct extends javax.swing.JPanel {
 
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
             System.out.println((String) tableModel.getValueAt(table.getSelectedRow(), 0));
-            sqlite.buyProduct((sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText())), (String) tableModel.getValueAt(table.getSelectedRow(), 0));
+           
             if (result == JOptionPane.OK_OPTION) {
+                sqlite.buyProduct((sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText())), (String) tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(stockFld.getText());
             }
         }
@@ -217,10 +223,11 @@ public class MgmtProduct extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(null, message, "ADD PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
         if (result == JOptionPane.OK_OPTION) {
+            sqlite.addProduct( nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
-        }
+        }   init(currUser,currRole);
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
@@ -238,11 +245,13 @@ public class MgmtProduct extends javax.swing.JPanel {
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-
+           
             if (result == JOptionPane.OK_OPTION) {
+                sqlite.EditProduct( nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
                 System.out.println(nameFld.getText());
                 System.out.println(stockFld.getText());
                 System.out.println(priceFld.getText());
+                init(currUser,currRole);
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
@@ -252,7 +261,9 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
+                sqlite.removeProduct((String) tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                init(currUser,currRole);
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
