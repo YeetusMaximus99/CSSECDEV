@@ -348,20 +348,47 @@ public class SQLite {
             System.out.print(ex);
         }
     }
-    
     public Product getProduct(String name){
-        String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
+        String sql = "SELECT name, stock, price FROM product WHERE name=?;";
         Product product = null;
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
-            product = new Product(rs.getString("name"),
-                                   rs.getInt("stock"),
-                                   rs.getFloat("price"));
-        } catch (Exception ex) {
-            System.out.print(ex);
-        }
-        return product;
+        try{
+             Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             pstmt.setString(1, name);
+
+             ResultSet rs = pstmt.executeQuery();
+             while (rs.next()) {
+                 product = new Product(rs.getString("name"),
+            rs.getInt("stock"),
+            rs.getFloat("price"));
+             }
+
+
+         } catch (Exception ex) {
+             ex.printStackTrace();
+         }
+         return product;
+    }
+    public Product getProduct(int id){
+        String sql = "SELECT name, stock, price FROM product WHERE id=?;";
+        Product product = null;
+        try{
+             Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             pstmt.setInt(1, id);
+
+             ResultSet rs = pstmt.executeQuery();
+             while (rs.next()) {
+                 product = new Product(rs.getString("name"),
+            rs.getInt("stock"),
+            rs.getFloat("price"));
+             }
+
+
+         } catch (Exception ex) {
+             ex.printStackTrace();
+         }
+         return product;
     }
     public int getStock(String name){
         String sql = "SELECT stock, price FROM product WHERE name=?;";
@@ -689,18 +716,18 @@ public class SQLite {
             ex.printStackTrace();
         }
     }
-    public void EditProduct(String name,int stock,float price){
+    public void EditProduct(int id,String name,int stock,float price){
       
-        String sql = "UPDATE product SET name = ?,stock=?, price = ? WHERE name=?";
+        String sql = "UPDATE product SET name = ?,stock=?, price = ? WHERE id=?";
         try {
             Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(4,name);
+            pstmt.setInt(4,id);
             pstmt.setString(1,name);
             pstmt.setInt(2, stock);
             pstmt.setFloat(3,price);
             pstmt.executeUpdate();
-
+            
         
         }catch(Exception ex){
             ex.printStackTrace();
@@ -713,6 +740,20 @@ public class SQLite {
             Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,name);
+            pstmt.execute();
+
+        
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public void removeProduct(int id){
+      
+        String sql = "DELETE from product WHERE id=?";
+        try {
+            Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1,id);
             pstmt.execute();
 
         

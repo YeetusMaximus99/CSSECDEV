@@ -113,6 +113,7 @@ public class Login extends javax.swing.JPanel {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         if(frame.main.sqlite.getLocked(usernameFld.getText())==1){
             
+            
             showMessageDialog(null, "Maximum attempts reached account has been locked. Please contact an Admin for assistance");
         }
         else if(frame.main.sqlite.authenticateUser(usernameFld.getText().toLowerCase(),passwordFld.getText())&& attempt != 3) {

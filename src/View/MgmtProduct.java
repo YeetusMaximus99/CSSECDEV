@@ -252,7 +252,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
            
             if (result == JOptionPane.OK_OPTION) {
-                sqlite.EditProduct( nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
+                sqlite.EditProduct(table.getSelectedRow()+1,nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
                 System.out.println(nameFld.getText());
                 System.out.println(stockFld.getText());
                 System.out.println(priceFld.getText());
@@ -266,7 +266,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
-                sqlite.removeProduct((String) tableModel.getValueAt(table.getSelectedRow(), 0));
+                sqlite.removeProduct(table.getSelectedRow()+1);
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 init(currUser,currRole);
             }
