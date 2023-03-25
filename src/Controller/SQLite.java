@@ -160,33 +160,51 @@ public class SQLite {
     }
     
     public void addHistory(String username, String name, int stock, String timestamp) {
-        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
+        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES(?,?,?,?)";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+        
+            pstmt.setString(1, username);
+            pstmt.setString(2, name);
+            pstmt.setInt(3, stock);
+            pstmt.setString(4, timestamp);
+        
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
     
     public void addLogs(String event, String username, String desc, String timestamp) {
-        String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES('" + event + "','" + username + "','" + desc + "','" + timestamp + "')";
+    String sql = "INSERT INTO logs(event, username, desc, timestamp) VALUES (?, ?, ?, ?)";
+    
+    try (Connection conn = DriverManager.getConnection(driverURL);
+        PreparedStatement pstmt = conn.prepareStatement(sql)){
         
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
-        } catch (Exception ex) {
-            System.out.print(ex);
-        }
+        pstmt.setString(1, event);
+        pstmt.setString(2, username);
+        pstmt.setString(3, desc);
+        pstmt.setString(4, timestamp);
+        
+        pstmt.executeUpdate();
+    } catch (Exception ex) {
+        System.out.print(ex);
     }
+}
     
     public void addProduct(String name, int stock, double price) {
-        String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
+        String sql = "INSERT INTO product(name,stock,price) VALUES(?,?,?)";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+           PreparedStatement pstmt = conn.prepareStatement(sql)){
+        
+            pstmt.setString(1, name);
+            pstmt.setInt(2, stock);
+            pstmt.setDouble(3, price);
+            
+
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
@@ -338,16 +356,18 @@ public class SQLite {
     }
     
     public void removeUser(String username) {
-        String sql = "DELETE FROM users WHERE username='" + username + "';";
+    String sql = "DELETE FROM users WHERE username=?";
 
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("User " + username + " has been deleted.");
-        } catch (Exception ex) {
-            System.out.print(ex);
-        }
+    try (Connection conn = DriverManager.getConnection(driverURL);
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, username);
+        stmt.executeUpdate();
+        System.out.println("User " + username + " has been deleted.");
+    } catch (Exception ex) {
+        System.out.print(ex);
     }
+}
+
     public Product getProduct(String name){
         String sql = "SELECT name, stock, price FROM product WHERE name=?;";
         Product product = null;
@@ -482,17 +502,12 @@ public class SQLite {
     public String getHash(String password, byte[] salt) {
          String generatedPassword = null;
         try {
-            // Create MessageDigest instance for MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
-            
-            // Add password bytes to digest
+
             md.update(salt);
-            
-            // Get the hash's bytes
+
             byte[] bytes = md.digest(password.getBytes());
-            
-            // This bytes[] has bytes in decimal format;
-            // Convert it to hexadecimal format
+
             StringBuilder sb = new StringBuilder();
             
             for (int i = 0; i < bytes.length; i++) {
@@ -500,7 +515,7 @@ public class SQLite {
                         .substring(1));
             }
             
-            // Get complete hashed password in hex format
+            
             generatedPassword = sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
