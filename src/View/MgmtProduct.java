@@ -9,7 +9,9 @@ import Controller.SQLite;
 import Model.Product;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -220,6 +222,7 @@ public class MgmtProduct extends javax.swing.JPanel {
            
             if (result == JOptionPane.OK_OPTION) {
                 sqlite.buyProduct((sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText())), (String) tableModel.getValueAt(table.getSelectedRow(), 0));
+                sqlite.addLogs("PURCHASE PRODUCT",currUser , "User purchased product ".concat((String)tableModel.getValueAt(table.getSelectedRow(), 0)).concat(" x ".concat(stockFld.getText())), new Timestamp(new Date().getTime()).toString()); 
                 System.out.println(stockFld.getText());
                 updateTable();
             }
@@ -244,6 +247,7 @@ public class MgmtProduct extends javax.swing.JPanel {
 
         if (result == JOptionPane.OK_OPTION) {
             sqlite.addProduct( nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
+            sqlite.addLogs("ADD PRODUCT",currUser , "User added product ".concat(nameFld.getText()), new Timestamp(new Date().getTime()).toString()); 
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
@@ -256,7 +260,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             JTextField nameFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 0) + "");
             JTextField stockFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 1) + "");
             JTextField priceFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 2) + "");
-
+               
             designer(nameFld, "PRODUCT NAME");
             designer(stockFld, "PRODUCT STOCK");
             designer(priceFld, "PRODUCT PRICE");
@@ -269,6 +273,7 @@ public class MgmtProduct extends javax.swing.JPanel {
            
             if (result == JOptionPane.OK_OPTION) {
                 sqlite.editProduct(table.getSelectedRow()+1,nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
+                sqlite.addLogs("EDIT PRODUCT",currUser , "User modified product ".concat(nameFld.getText()), new Timestamp(new Date().getTime()).toString()); 
                 System.out.println(nameFld.getText());
                 System.out.println(stockFld.getText());
                 System.out.println(priceFld.getText());
@@ -284,6 +289,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 String product = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
                 sqlite.removeProduct(product);
+                sqlite.addLogs("REMOVE PRODUCT",currUser , "User removed ".concat(product), new Timestamp(new Date().getTime()).toString());
                 
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 init(currUser,currRole);

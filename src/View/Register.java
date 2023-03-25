@@ -1,5 +1,7 @@
 
 package View;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -195,6 +197,7 @@ public class Register extends javax.swing.JPanel {
             if(frame.main.sqlite.checkUser(usernameFld.getText().toLowerCase(),passwordFld.getText(),confpassFld.getText())){
                 byte[] salt = frame.main.sqlite.newSalt();
                 frame.registerAction(usernameFld.getText().toLowerCase(), passwordFld.getText(),SecQuestFld.getText(),SecQuestFld1.getText(),SecQuestFld2.getText(), confpassFld.getText(),salt);
+                frame.main.sqlite.addLogs("REGISTRATION",usernameFld.getText().toLowerCase() , "User creation successful", new Timestamp(new Date().getTime()).toString());
                 passwordFld.setText("");
                 confpassFld.setText("");
                 usernameFld.setText("");
@@ -202,6 +205,7 @@ public class Register extends javax.swing.JPanel {
                 SecQuestFld1.setText("");
                 SecQuestFld2.setText("");
                 showMessageDialog(null,"Register Success");
+                
                 frame.loginNav();
             }
             else{
