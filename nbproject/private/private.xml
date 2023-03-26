@@ -3,18 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/View/AdminHome.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/Model/Product.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/Controller/Main.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/View/Frame.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/View/Register.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/View/ClientHome.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/Model/History.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/Controller/SQLite.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/Model/User.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/View/Login.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/Model/Logs.java</file>
-            <file>file:/C:/Users/carlo/Documents/GitHub/CSSECDEV/src/View/Home.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/MgmtUser.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/ClientHome.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/MgmtHistory.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/Controller/SQLite.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/MgmtProduct.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/Controller/Main.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/Frame.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/MgmtLogs.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/Register.java</file>
+            <file>file:/E:/School/Github/CSSECDEV/src/View/Login.java</file>
         </group>
     </open-files>
 </project-private>

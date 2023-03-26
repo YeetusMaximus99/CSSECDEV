@@ -6,6 +6,8 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -207,6 +209,7 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+        main.sqlite.addLogs("LOGOUT", currUser, "User logout", new Timestamp(new Date().getTime()).toString());
         currUser = null;
         currRole = 0;
         frameView.show(Container, "loginPnl");

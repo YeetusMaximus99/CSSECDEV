@@ -2,6 +2,8 @@
 package View;
 
 import java.awt.Color;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,11 +116,11 @@ public class Login extends javax.swing.JPanel {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         if(frame.main.sqlite.getLocked(usernameFld.getText())==1){
             
-            
             showMessageDialog(null, "Maximum attempts reached account has been locked. Please contact an Admin for assistance");
         }
         else if(frame.main.sqlite.authenticateUser(usernameFld.getText().toLowerCase(),passwordFld.getText())&& attempt != 3) {
         frame.authRole(frame.main.sqlite.getRole(usernameFld.getText().toLowerCase(),passwordFld.getText()),usernameFld.getText());
+        frame.main.sqlite.addLogs("LOGIN",usernameFld.getText().toLowerCase() , "User Login Successful", new Timestamp(new Date().getTime()).toString());
         usernameFld.setText("");
         passwordFld.setText("");
         frame.mainNav();
@@ -126,8 +128,11 @@ public class Login extends javax.swing.JPanel {
         }
         else if (attempt != 3){
             attempt++;
-            if (attempt == 3)
+            if (attempt == 3){
+                frame.main.sqlite.addLogs("LOCKOUT",usernameFld.getText().toLowerCase() , "User exceeded maximum login attempts", new Timestamp(new Date().getTime()).toString());
                 frame.main.sqlite.lockout(usernameFld.getText().toLowerCase());
+            }
+                
             
             
             showMessageDialog(null, "Incorrect username/password. Please try again");
@@ -184,6 +189,7 @@ private void forgotPass() {
         Matcher matcher = pattern.matcher(newPass.getText()); 
         boolean matchFound = matcher.find();
         if(matchFound){
+        frame.main.sqlite.addLogs("NEW PASSWORD",usernameFld.getText().toLowerCase() , "User successfully changed password", new Timestamp(new Date().getTime()).toString());
         frame.main.sqlite.forgotPassword(usernameFld.getText().toLowerCase(),newPass.getText());
         showMessageDialog(null, "Password Update Successful");
         }

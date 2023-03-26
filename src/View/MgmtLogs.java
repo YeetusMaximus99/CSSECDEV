@@ -7,7 +7,9 @@ package View;
 
 import Controller.SQLite;
 import Model.Logs;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -133,9 +135,26 @@ public class MgmtLogs extends javax.swing.JPanel {
                     .addComponent(clearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+public void updateTable() {
+   ArrayList<Logs> updatedLogs = sqlite.getLogs();
 
+        tableModel.setRowCount(0);
+
+
+        for (int nCtr = 0; nCtr < updatedLogs.size(); nCtr++) {
+            tableModel.addRow(new Object[]{
+                updatedLogs.get(nCtr).getEvent(), 
+                updatedLogs.get(nCtr).getUsername(), 
+                updatedLogs.get(nCtr).getDesc(), 
+                updatedLogs.get(nCtr).getTimestamp()});
+        }
+
+     }
     private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
-        
+        sqlite.dropLogsTable();
+        sqlite.createLogsTable();
+        sqlite.addLogs("CLEAR","ADMIN" , "Admin cleared logs table", new Timestamp(new Date().getTime()).toString());
+        updateTable();
     }//GEN-LAST:event_clearBtnActionPerformed
 
     private void debugBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugBtnActionPerformed
