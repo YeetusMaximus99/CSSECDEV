@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.Timer;
 
 
 public class Login extends javax.swing.JPanel {
@@ -16,7 +17,7 @@ public class Login extends javax.swing.JPanel {
     public Login() {
         initComponents();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

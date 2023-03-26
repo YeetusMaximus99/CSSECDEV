@@ -4,6 +4,8 @@ import Controller.Main;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -206,6 +208,7 @@ public class Frame extends javax.swing.JFrame {
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         currUser = null;
+        currRole = 0;
         frameView.show(Container, "loginPnl");
         
     }//GEN-LAST:event_logoutBtnActionPerformed
@@ -308,7 +311,14 @@ public class Frame extends javax.swing.JFrame {
                 adminBtn.setEnabled(true);
             
         }
-   
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                loginNav();
+            }
+        },30 * 60 * 1000);
         SwingUtilities.updateComponentTreeUI(this);
     }
 
