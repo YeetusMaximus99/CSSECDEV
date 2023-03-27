@@ -43,8 +43,10 @@ public class MgmtHistory extends javax.swing.JPanel {
 //       reportBtn.setVisible(false);
     }
 
-    public void init(){
+    public void init(String user,int role){
 //      CLEAR TABLE
+        currUser = user;
+        currRole = role;
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
@@ -229,7 +231,7 @@ public class MgmtHistory extends javax.swing.JPanel {
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void reloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadBtnActionPerformed
-        init();
+        init(currUser,currRole);
     }//GEN-LAST:event_reloadBtnActionPerformed
 
 

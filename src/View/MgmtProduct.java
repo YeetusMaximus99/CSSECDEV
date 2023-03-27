@@ -221,10 +221,15 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println((String) tableModel.getValueAt(table.getSelectedRow(), 0));
            
             if (result == JOptionPane.OK_OPTION) {
+                if(sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText()) < 0){
+                    JOptionPane.showMessageDialog(null, "Not enough Stock for purchase");
+                }
+                else{
                 sqlite.buyProduct((sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText())), (String) tableModel.getValueAt(table.getSelectedRow(), 0));
                 sqlite.addLogs("PURCHASE PRODUCT",currUser , "User purchased product ".concat((String)tableModel.getValueAt(table.getSelectedRow(), 0)).concat(" x ".concat(stockFld.getText())), new Timestamp(new Date().getTime()).toString()); 
-                System.out.println(stockFld.getText());
+                sqlite.addHistory(currUser,  (String) tableModel.getValueAt(table.getSelectedRow(), 0), parseInt(stockFld.getText()), new Timestamp(new Date().getTime()).toString());
                 updateTable();
+                }
             }
         }
        
