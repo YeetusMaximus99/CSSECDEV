@@ -71,6 +71,7 @@ public class MgmtHistory extends javax.swing.JPanel {
             case(2):
                 history = sqlite.getUserHistory(currUser);
             for(int nCtr = 0; nCtr < history.size(); nCtr++){
+                
                 Product product = sqlite.getProduct(history.get(nCtr).getName());
                 tableModel.addRow(new Object[]{
                     history.get(nCtr).getUsername(), 
@@ -82,7 +83,7 @@ public class MgmtHistory extends javax.swing.JPanel {
                     });
                 }
             break;
-            case(3):
+            case(4):
                 searchBtn.setVisible(true);
                 history = sqlite.getHistory();
             for(int nCtr = 0; nCtr < history.size(); nCtr++){

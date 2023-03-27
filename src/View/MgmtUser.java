@@ -209,7 +209,7 @@ public class MgmtUser extends javax.swing.JPanel {
             if(result != null){
                 String user = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
                 char role = result.charAt(0);
-                sqlite.addLogs("EDIT USER ROLE", "ADMIN" , " User "+ user + " role changed from " + tableModel.getValueAt(table.getSelectedRow(), 2) + " to " + role, new Timestamp(new Date().getTime()).toString());
+                sqlite.addLogs("EDIT USER ROLE", "ADMIN" , "User "+ user + " role changed from " + tableModel.getValueAt(table.getSelectedRow(), 2) + " to " + role, new Timestamp(new Date().getTime()).toString());
                 sqlite.editUserRole(user,Character.getNumericValue(role));
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(result.charAt(0));

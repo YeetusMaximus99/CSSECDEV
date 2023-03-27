@@ -221,6 +221,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println((String) tableModel.getValueAt(table.getSelectedRow(), 0));
            
             if (result == JOptionPane.OK_OPTION) {
+                
                 if(sqlite.getStock((String) tableModel.getValueAt(table.getSelectedRow(), 0)) - parseInt(stockFld.getText()) < 0){
                     JOptionPane.showMessageDialog(null, "Not enough Stock for purchase");
                 }
