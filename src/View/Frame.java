@@ -4,6 +4,8 @@ import Controller.Main;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.sql.Timestamp;
@@ -15,6 +17,12 @@ public class Frame extends javax.swing.JFrame {
 
     public Frame() {
         initComponents();
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                resetTimer();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -227,6 +235,8 @@ public class Frame extends javax.swing.JFrame {
     private ClientHome clientHomePnl = new ClientHome();
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
+    public Timer timer = new Timer();
+    public Timer timerInput = new Timer();
     
     public void init(Main controller){
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -275,6 +285,20 @@ public class Frame extends javax.swing.JFrame {
        
         
     }
+    
+    
+   
+    
+    public void resetTimer() {
+        timerInput.cancel();
+        timerInput = new Timer();
+        timerInput.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                loginNav();
+            }
+        }, 30 * 60 * 1000);
+}
     public void authRole(int role,String user){
         System.out.println(role);
         System.out.println(user);
@@ -314,9 +338,17 @@ public class Frame extends javax.swing.JFrame {
                 adminBtn.setEnabled(true);
             
         }
-        Timer timer = new Timer();
+        
+        
+        
 
         timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                loginNav();
+            }
+        },30 * 60 * 1000);
+        timerInput.schedule(new TimerTask(){
             @Override
             public void run(){
                 loginNav();
