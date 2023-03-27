@@ -236,6 +236,7 @@ public class Frame extends javax.swing.JFrame {
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
     public Timer timer = new Timer();
+    public Timer timerInput = new Timer();
     
     public void init(Main controller){
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -289,9 +290,9 @@ public class Frame extends javax.swing.JFrame {
    
     
     public void resetTimer() {
-        timer.cancel();
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+        timerInput.cancel();
+        timerInput = new Timer();
+        timerInput.schedule(new TimerTask() {
             @Override
             public void run() {
                 loginNav();
@@ -342,6 +343,12 @@ public class Frame extends javax.swing.JFrame {
         
 
         timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                loginNav();
+            }
+        },30 * 60 * 1000);
+        timerInput.schedule(new TimerTask(){
             @Override
             public void run(){
                 loginNav();
