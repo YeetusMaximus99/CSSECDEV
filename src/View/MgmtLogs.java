@@ -29,7 +29,7 @@ public class MgmtLogs extends javax.swing.JPanel {
         
 //        UNCOMMENT TO DISABLE BUTTONS
 //        clearBtn.setVisible(false);
-//        debugBtn.setVisible(false);
+        debugBtn.setVisible(false);
     }
 
     public void init(){

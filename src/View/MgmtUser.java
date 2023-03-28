@@ -211,8 +211,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 char role = result.charAt(0);
                 sqlite.addLogs("EDIT USER ROLE", "ADMIN" , "User "+ user + " role changed from " + tableModel.getValueAt(table.getSelectedRow(), 2) + " to " + role, new Timestamp(new Date().getTime()).toString());
                 sqlite.editUserRole(user,Character.getNumericValue(role));
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
-                System.out.println(result.charAt(0));
+                
                 updateTable();
             }
         }
@@ -226,7 +225,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 String user = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
                 sqlite.addLogs("DELETE USER","ADMIN" , "Admin deleted user "+ user, new Timestamp(new Date().getTime()).toString());
                 sqlite.removeUser(user);
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                
                 updateTable();
             }
         }
@@ -252,7 +251,7 @@ public class MgmtUser extends javax.swing.JPanel {
                     sqlite.unlock(username);
                 }
                     
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                
                 updateTable();
             }
         }
@@ -277,8 +276,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 String newpass = password.getText();
                 sqlite.addLogs("USER PASSWORD CHANGE","ADMIN" , "Admin changed user "+ username + " password", new Timestamp(new Date().getTime()).toString());
                 sqlite.forgotPassword(username, newpass);
-                System.out.println(password.getText());
-                System.out.println(confpass.getText());
+                
                 updateTable();
             }
         }

@@ -12,7 +12,9 @@ import static java.lang.Integer.parseInt;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,7 @@ public class MgmtProduct extends javax.swing.JPanel {
     public DefaultTableModel tableModel;
     private String currUser;
     private int currRole;
+    String regexInput = "^(?!.*['\";\\-\\-]).{2,24}$";
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
@@ -51,10 +54,11 @@ public class MgmtProduct extends javax.swing.JPanel {
            case (2):
                purchaseBtn.setVisible(true);
                break;
-           case(5):
+           case(4):
              addBtn.setVisible(true);
              editBtn.setVisible(true);
-             deleteBtn.setVisible(true);  
+             deleteBtn.setVisible(true);
+             break;
             case (3):
                addBtn.setVisible(true);
                editBtn.setVisible(true);
@@ -218,7 +222,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-            System.out.println((String) tableModel.getValueAt(table.getSelectedRow(), 0));
+            
            
             if (result == JOptionPane.OK_OPTION) {
                 
@@ -252,11 +256,21 @@ public class MgmtProduct extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(null, message, "ADD PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
         if (result == JOptionPane.OK_OPTION) {
+            int valid = 1;
+            if (Pattern.matches(regexInput, nameFld.getText()));
+                    valid = 0;
+                
+            
+            
+            if(valid == 1){
             sqlite.addProduct( nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
             sqlite.addLogs("ADD PRODUCT",currUser , "User added product ".concat(nameFld.getText()), new Timestamp(new Date().getTime()).toString()); 
-            System.out.println(nameFld.getText());
-            System.out.println(stockFld.getText());
-            System.out.println(priceFld.getText());
+            }
+           else
+                showMessageDialog(null, "Invalid input. Please try again");
+                
+            
+            
             updateTable();
         }   init(currUser,currRole);
     }//GEN-LAST:event_addBtnActionPerformed
@@ -278,11 +292,13 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
            
             if (result == JOptionPane.OK_OPTION) {
+                int valid = 1;
+            if (Pattern.matches(regexInput, nameFld.getText()));
+                    valid = 0;
+            if(valid == 1){
                 sqlite.editProduct(table.getSelectedRow()+1,nameFld.getText(), parseInt(stockFld.getText()), parseFloat(priceFld.getText()));
                 sqlite.addLogs("EDIT PRODUCT",currUser , "User modified product ".concat(nameFld.getText()), new Timestamp(new Date().getTime()).toString()); 
-                System.out.println(nameFld.getText());
-                System.out.println(stockFld.getText());
-                System.out.println(priceFld.getText());
+            }
                 init(currUser,currRole);
             }
         }
@@ -297,7 +313,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                 sqlite.removeProduct(product);
                 sqlite.addLogs("REMOVE PRODUCT",currUser , "User removed ".concat(product), new Timestamp(new Date().getTime()).toString());
                 
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                
                 init(currUser,currRole);
                 updateTable();
             }

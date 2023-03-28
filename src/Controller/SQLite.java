@@ -99,7 +99,10 @@ public class SQLite {
             + " password TEXT NOT NULL,\n"
             + " role INTEGER DEFAULT 2,\n"
             + " locked INTEGER DEFAULT 0,\n"
-            + " salt VARBINARY\n"
+            + " salt VARBINARY,\n"
+            + " answer1 TEXT,\n"
+            + " answer2 TEXT,\n"
+            + " answer3 TEXT\n"
             + ");";
 
         try (Connection conn = DriverManager.getConnection(driverURL);

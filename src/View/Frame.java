@@ -300,8 +300,7 @@ public class Frame extends javax.swing.JFrame {
         }, 30 * 60 * 1000);
 }
     public void authRole(int role,String user){
-        System.out.println(role);
-        System.out.println(user);
+        
         currRole= role;
         currUser = user;
         switch(role){
@@ -353,7 +352,7 @@ public class Frame extends javax.swing.JFrame {
             public void run(){
                 loginNav();
             }
-        },30 * 60 * 1000);
+        },15 * 60 * 1000);
         SwingUtilities.updateComponentTreeUI(this);
     }
 
